@@ -1,0 +1,88 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+class Task {
+public:
+    Task(const std::string& description) : description(description) {}
+
+    const std::string& getDescription() const {
+        return description;
+    }
+
+private:
+    std::string description;
+};
+
+class ToDoList {
+public:
+    void addTask(const std::string& description) {
+        tasks.push_back(Task(description));
+        std::cout << "Task added." << std::endl;
+    }
+
+    void viewTasks() const {
+        std::cout << "To-Do List:" << std::endl;
+        for (size_t i = 0; i < tasks.size(); ++i) {
+            std::cout << i + 1 << ". " << tasks[i].getDescription() << std::endl;
+        }
+    }
+
+    void deleteTask(size_t index) {
+        if (index >= 0 && index < tasks.size()) {
+            tasks.erase(tasks.begin() + index);
+            std::cout << "Task deleted." << std::endl;
+        } else {
+            std::cout << "Invalid task index." << std::endl;
+        }
+    }
+
+private:
+    std::vector<Task> tasks;
+};
+
+int main() {
+    ToDoList toDoList;
+
+    std::cout << "Welcome to the To-Do List Manager!" << std::endl;
+
+    while (true) {
+        std::cout << "Options:" << std::endl;
+        std::cout << "1. Add Task" << std::endl;
+        std::cout << "2. View Tasks" << std::endl;
+        std::cout << "3. Delete Task" << std::endl;
+        std::cout << "4. Exit" << std::endl;
+
+        int choice;
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                std::string description;
+                std::cout << "Enter task description: ";
+                std::cin.ignore(); // Clear the newline character
+                std::getline(std::cin, description);
+                toDoList.addTask(description);
+                break;
+            }
+            case 2:
+                toDoList.viewTasks();
+                break;
+            case 3: {
+                size_t taskIndex;
+                std::cout << "Enter the index of the task to delete: ";
+                std::cin >> taskIndex;
+                toDoList.deleteTask(taskIndex - 1);
+                break;
+            }
+            case 4:
+                std::cout << "Exiting the program." << std::endl;
+                return 0;
+            default:
+                std::cout << "Invalid choice. Please select a valid option." << std::endl;
+        }
+    }
+
+    return 0;
+}
